@@ -1,4 +1,4 @@
-# sdet-journey-2026
+# SDET Journey 2026
 
 
 My six-month journey to become an SDET
