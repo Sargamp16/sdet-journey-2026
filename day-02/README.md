@@ -1,8 +1,9 @@
-# Day 02 — Functions, Objects & Asynchronous JavaScript
+# Day 02 — JavaScript Functions, Objects & Scope
 
 **Date:** August 9, 2026
 **Journey:** SDET → International Job
 **Day:** 2 / 180
+**Status:** ✅ Completed
 
 ---
 
@@ -14,10 +15,13 @@
 * Practice arrow functions
 * Understand objects and object properties
 * Understand arrays containing objects
+* Understand `map()` and `filter()` with objects
 * Understand how functions receive objects
-* Strengthen `map()` and `filter()` concepts
-* Understand the basics of Promises
+* Understand JavaScript scope
+* Understand `let`, `const`, and `var`
+* Understand basic Promises
 * Understand `async` and `await`
+* Solve an SDET-style JavaScript problem
 
 ---
 
@@ -27,15 +31,13 @@
 
 A function is a reusable block of code that performs a specific task.
 
-Example:
-
 ```typescript
 function addNumbers(a, b) {
     return a + b;
 }
 ```
 
-The function can then be called:
+The function can be called using:
 
 ```typescript
 addNumbers(10, 20);
@@ -45,9 +47,7 @@ addNumbers(10, 20);
 
 ## 2. Parameters vs Arguments
 
-### Parameters
-
-Parameters are the variables defined in the function.
+Parameters are the variables defined in a function:
 
 ```typescript
 function multiply(a, b) {
@@ -61,9 +61,7 @@ Here:
 a and b → parameters
 ```
 
-### Arguments
-
-Arguments are the actual values passed when calling the function.
+Arguments are the actual values passed when calling the function:
 
 ```typescript
 multiply(5, 10);
@@ -95,11 +93,9 @@ Function call
 
 ---
 
-# 3. Return Value
+# 3. Return Values
 
-`return` sends a value back to the code that called the function.
-
-Example:
+`return` sends a value back from a function.
 
 ```typescript
 function calculateSquare(number) {
@@ -109,25 +105,27 @@ function calculateSquare(number) {
 const result = calculateSquare(5);
 ```
 
-The returned value is:
+The result is:
 
 ```text
 25
 ```
 
-`console.log()` and `return` are different.
+`return` and `console.log()` are different.
 
-`console.log()` displays a value.
+```text
+return
+→ sends a value back
 
-`return` sends a value back from the function so it can be stored or used elsewhere.
+console.log()
+→ displays a value
+```
 
 ---
 
 # 4. Arrow Functions
 
-A function can also be written using arrow-function syntax.
-
-Traditional function:
+A traditional function:
 
 ```typescript
 function addNumbers(a, b) {
@@ -135,7 +133,7 @@ function addNumbers(a, b) {
 }
 ```
 
-Arrow function:
+Can also be written as:
 
 ```typescript
 const addNumbers = (a, b) => {
@@ -143,7 +141,7 @@ const addNumbers = (a, b) => {
 };
 ```
 
-Short form:
+Or in short form:
 
 ```typescript
 const addNumbers = (a, b) => a + b;
@@ -153,9 +151,7 @@ const addNumbers = (a, b) => a + b;
 
 # 5. Objects
 
-An object stores related information using key-value pairs.
-
-Example:
+Objects store related information using key-value pairs.
 
 ```typescript
 const employee = {
@@ -184,8 +180,6 @@ QA
 
 An array can contain multiple objects.
 
-Example:
-
 ```typescript
 const employees = [
     { name: "John", role: "QA", experience: 2 },
@@ -199,19 +193,19 @@ Conceptually:
 
 ```text
 Array
- ├── Employee object
- ├── Employee object
- ├── Employee object
- └── Employee object
+ ├── Object
+ ├── Object
+ ├── Object
+ └── Object
 ```
 
-An individual object can be accessed using its array index:
+An individual object can be accessed using:
 
 ```typescript
 employees[0];
 ```
 
-Its name can then be accessed using:
+A property can then be accessed using:
 
 ```typescript
 employees[0].name;
@@ -223,17 +217,15 @@ employees[0].name;
 
 `filter()` checks each element and keeps the elements for which the condition is true.
 
-Example:
-
 ```typescript
 const qaEmployees = employees.filter(
     employee => employee.role === "QA"
 );
 ```
 
-The important thing I learned today is:
+The important concept learned today:
 
-> When filtering an array of objects, the complete object is preserved.
+> `filter()` keeps the complete original element when the condition is true.
 
 The result is:
 
@@ -244,15 +236,13 @@ The result is:
 ]
 ```
 
-It does NOT automatically return only the property used in the condition.
+The entire objects are preserved.
 
 ---
 
 # 8. `map()` with Objects
 
 `map()` transforms each element into something else.
-
-Example:
 
 ```typescript
 const names = employees.map(
@@ -266,23 +256,21 @@ Result:
 ["John", "Sarah", "Mike", "Emma"]
 ```
 
-This means:
+### Important difference
 
 ```text
 filter()
-→ decides which elements to keep
+→ Which elements should I keep?
 
 map()
-→ decides what each element becomes
+→ What should each element become?
 ```
 
 ---
 
 # 9. Combining `filter()` and `map()`
 
-These methods can be combined.
-
-Example:
+These methods can be used together.
 
 ```typescript
 const qaNames = employees
@@ -292,11 +280,11 @@ const qaNames = employees
 
 Result:
 
-```typescript
+```text
 ["John", "Mike"]
 ```
 
-The flow is:
+Flow:
 
 ```text
 employees
@@ -316,8 +304,6 @@ employee names
 
 Multiple conditions can be combined using `&&`.
 
-Example:
-
 ```typescript
 const experiencedQA = employees.filter(
     employee =>
@@ -330,7 +316,7 @@ Both conditions must be true.
 
 Result:
 
-```typescript
+```text
 [
     { name: "Mike", role: "QA", experience: 6 }
 ]
@@ -341,8 +327,6 @@ Result:
 # 11. Functions Receiving Objects
 
 A function parameter can receive an object.
-
-Example:
 
 ```typescript
 function getName(user) {
@@ -374,11 +358,133 @@ The result is:
 
 ---
 
-# 12. Promises
+# 12. Scope
+
+Scope determines where a variable can be accessed.
+
+Example:
+
+```typescript
+function greet() {
+    const message = "Hello";
+}
+
+console.log(message);
+```
+
+This produces an error because `message` exists only inside the function.
+
+---
+
+# 13. `let`, `const`, and `var`
+
+### `let`
+
+Can be reassigned:
+
+```typescript
+let age = 29;
+age = 30;
+```
+
+### `const`
+
+Cannot be reassigned:
+
+```typescript
+const name = "Sargam";
+```
+
+But objects and arrays declared with `const` can still be modified:
+
+```typescript
+const user = {
+    name: "Sargam",
+    age: 29
+};
+
+user.age = 30;
+```
+
+This is allowed because the variable itself is not being reassigned.
+
+This is not allowed:
+
+```typescript
+user = anotherUser;
+```
+
+### `var`
+
+`var` is function scoped, while `let` and `const` are block scoped.
+
+Because of this difference, modern JavaScript generally prefers `let` and `const`.
+
+---
+
+# 14. Block Scope
+
+Example:
+
+```typescript
+if (true) {
+    let x = 10;
+    const y = 20;
+    var z = 30;
+}
+```
+
+Outside the block:
+
+```text
+x → not accessible
+y → not accessible
+z → accessible
+```
+
+This happens because:
+
+```text
+let   → block scoped
+const → block scoped
+var   → function scoped
+```
+
+---
+
+# 15. Variable Shadowing
+
+A variable inside a function can have the same name as a variable outside the function.
+
+```typescript
+let name = "Sargam";
+
+function test() {
+    let name = "Sarah";
+    console.log(name);
+}
+
+test();
+
+console.log(name);
+```
+
+Output:
+
+```text
+Sarah
+Sargam
+```
+
+The inner `name` shadows the outer `name` within the function.
+
+---
+
+# 16. Promises
 
 A Promise represents the eventual result of an asynchronous operation.
 
-An asynchronous operation may be:
+A Promise can be:
 
 ```text
 Pending
@@ -400,25 +506,23 @@ For example:
 fetchUser();
 ```
 
-can represent an operation that retrieves user data asynchronously.
+may return a Promise representing an asynchronous user request.
 
-Conceptually:
+Mental model:
 
 ```text
 fetchUser()
-     ↓
-  Promise
-     ↓
+    ↓
+Promise
+    ↓
 eventual result
 ```
 
 ---
 
-# 13. `async` and `await`
+# 17. `async` and `await`
 
 An `async` function returns a Promise.
-
-Example:
 
 ```typescript
 async function getUser() {
@@ -429,17 +533,17 @@ async function getUser() {
 
 `fetchUser()` returns a Promise.
 
-`await` waits for that Promise to settle and gives us its resulting value.
+`await` waits for that Promise to settle and gives the resulting value.
 
-Because `getUser()` is an `async` function, calling:
+Because `getUser()` is an async function:
 
 ```typescript
 const result = getUser();
 ```
 
-gives us a Promise.
+`result` is a Promise.
 
-To obtain the eventual result inside another asynchronous function, we can use:
+To obtain the eventual value inside another async function:
 
 ```typescript
 const result = await getUser();
@@ -471,13 +575,11 @@ returns Promise
 
 ## Exercise 1 — Calculate Square
 
-Created a function that accepts a number and returns its square.
-
 ```typescript
 calculateSquare(5);
 ```
 
-Expected:
+Result:
 
 ```text
 25
@@ -487,16 +589,26 @@ Expected:
 
 ## Exercise 2 — Check Adult
 
-Created a function that determines whether an age is 18 or older.
-
 ```typescript
 isAdult(25);
 ```
 
-Expected:
+Result:
 
 ```text
 true
+```
+
+And:
+
+```typescript
+isAdult(16);
+```
+
+Result:
+
+```text
+false
 ```
 
 ---
@@ -510,7 +622,7 @@ Created an employee object containing:
 * role
 * experience
 
-Accessed the employee's role using:
+Accessed:
 
 ```typescript
 employee.role;
@@ -520,7 +632,11 @@ employee.role;
 
 ## Exercise 4 — Find QA Employees
 
-Filtered employees based on their role.
+Filtered employees where:
+
+```typescript
+employee.role === "QA"
+```
 
 Expected names:
 
@@ -542,23 +658,139 @@ Expected:
 
 Important lesson:
 
-I initially mapped the employee objects to names before checking experience. This removed the `experience` property from the data I was working with.
+I initially mapped the employee objects to names before checking their experience. This removed the `experience` property from the data.
 
-The correct approach is to filter using both properties first, then map to the name if required.
+The correct approach is to filter using the required properties first and map to names afterward.
+
+---
+
+## Exercise 6 — Function Receiving Object
+
+Given:
+
+```typescript
+function introduce(person) {
+    return `My name is ${person.name}`;
+}
+```
+
+Passing the `user` object into the function makes `person` refer to that object.
+
+Result:
+
+```text
+"My name is Sargam"
+```
+
+---
+
+## Exercise 7 — Async Reasoning
+
+Learned that:
+
+```typescript
+fetchUser()
+```
+
+returns a Promise.
+
+`await` waits for that Promise and gives the resulting value.
+
+An `async` function returns a Promise.
+
+Therefore:
+
+```typescript
+const result = getUser();
+```
+
+produces a Promise when `getUser()` is async.
+
+---
+
+## Exercise 8 — Scope
+
+Learned that variables with the same name can exist in different scopes.
+
+The inner variable shadows the outer variable within its scope.
+
+---
+
+## Exercise 9 — `const` Object
+
+Learned that `const` prevents reassignment of the variable but does not make an object immutable.
+
+---
+
+## Exercise 10 — Block Scope
+
+Learned the difference between:
+
+```text
+let   → block scoped
+const → block scoped
+var   → function scoped
+```
+
+---
+
+## Exercise 11 — Function Scope
+
+Learned that variables declared inside a function cannot be accessed directly outside the function.
+
+However, a value can be returned from the function and stored outside.
+
+---
+
+# 🧪 Final SDET Challenge
+
+Created:
+
+```typescript
+function getSlowPassedTests(testResults)
+```
+
+The function:
+
+1. Finds passed tests
+2. Finds tests taking more than 4 seconds
+3. Returns their names
+
+Solution:
+
+```typescript
+function getSlowPassedTests(testResults) {
+    const slowPassedTests = testResults.filter(
+        testResult =>
+            testResult.status === "passed" &&
+            testResult.duration > 4000
+    );
+
+    return slowPassedTests.map(
+        testResult => testResult.test
+    );
+}
+```
+
+Expected result:
+
+```text
+["Checkout", "Profile"]
+```
 
 ---
 
 # ❌ Mistakes & Lessons
 
-## Mistake 1 — `>=` vs `=>`
+### Mistake 1 — `>=` vs `=>`
 
-I initially wrote:
+Incorrect:
 
 ```typescript
 age => 18
 ```
 
-when I meant:
+Correct:
 
 ```typescript
 age >= 18
@@ -570,79 +802,79 @@ age >= 18
 
 ---
 
-## Mistake 2 — Losing object properties after `map()`
+### Mistake 2 — Mapping too early
 
-I initially did:
+Incorrect approach:
 
 ```typescript
-const result = employees.filter(
-    employee => employee.role === "QA"
-);
-
 const names = result.map(
     employee => employee.name
 );
-```
 
-This produces:
-
-```typescript
-["John", "Mike"]
-```
-
-After this transformation, the objects are no longer available in `names`.
-
-Therefore this would not work:
-
-```typescript
 names.filter(
     employee => employee.experience > 3
 );
 ```
 
-because `names` contains strings, not employee objects.
+After `map()`, `names` contains strings rather than employee objects.
 
-### Correct approach
-
-Filter using all required object properties first:
+Correct approach:
 
 ```typescript
-const result = employees.filter(
+const experiencedQA = employees.filter(
     employee =>
         employee.role === "QA" &&
         employee.experience > 3
 );
 ```
 
-Then map if only the names are required.
+Then map the names if required.
 
 ---
 
-# 🧠 Most Important Lesson of Day 2
+### Mistake 3 — Confusing `const` with immutability
 
-I learned to distinguish between:
+`const` prevents reassignment:
 
-```text
-filter()
+```typescript
+user = anotherUser; // ❌
 ```
 
-and:
+It does not prevent modifying object properties:
 
-```text
-map()
+```typescript
+user.age = 30; // ✅
 ```
+
+---
+
+# 🧠 Biggest Lessons From Day 2
+
+The most important concepts I learned today are:
 
 ### `filter()`
 
 > Which elements should I keep?
 
-It preserves the complete original element.
-
 ### `map()`
 
 > What should each element become?
 
-It transforms each element.
+### Function parameter
+
+> A parameter receives the argument passed to a function.
+
+### Scope
+
+> A variable can only be accessed within its available scope.
+
+### `const`
+
+> `const` prevents reassignment, not necessarily mutation.
+
+### `async/await`
+
+> `fetchUser()` can return a Promise, `await` waits for its result, and an `async` function itself returns a Promise.
 
 ---
 
@@ -650,15 +882,15 @@ It transforms each element.
 
 These concepts will be heavily used in automation.
 
-For example, automated tests often work with arrays of:
+Automation code frequently works with:
 
-* test results
-* API response objects
-* test data
-* users
-* products
-* transactions
-* configuration objects
+* API responses
+* Test data
+* Users
+* Products
+* Test results
+* Configuration objects
+* Arrays of test cases
 
 A common pattern will be:
 
@@ -672,11 +904,32 @@ map required values
 assert expected result
 ```
 
-Understanding this logic is more important than memorizing syntax.
+Understanding the logic is more important than memorizing syntax.
 
 ---
 
-# 📝 Day 2 Reflection
+# 📈 Day 2 Progress
+
+| Topic                     | Status        |
+| ------------------------- | ------------- |
+| Functions                 | ✅             |
+| Parameters & arguments    | ✅             |
+| Return values             | ✅             |
+| Arrow functions           | ✅             |
+| Objects                   | ✅             |
+| Arrays of objects         | ✅             |
+| `filter()`                | ✅             |
+| `map()`                   | ✅             |
+| `filter()` + `map()`      | ✅             |
+| Scope                     | ✅             |
+| `let` / `const` / `var`   | ✅             |
+| Promises                  | 🟡 Foundation |
+| `async` / `await`         | 🟡 Foundation |
+| SDET-style coding problem | ✅             |
+
+---
+
+# 📝 Reflection
 
 ### What I understood well
 
@@ -684,20 +937,19 @@ Understanding this logic is more important than memorizing syntax.
 * Parameters and arguments
 * Return values
 * Objects
-* Arrays containing objects
+* Arrays of objects
 * `filter()`
 * `map()`
-* Combining `filter()` and `map()`
+* Scope
 * Passing objects into functions
 
-### What I still need to practice
+### What I need more practice with
 
 * Promises
-* `async`
-* `await`
-* JavaScript scope
-* TypeScript typing
-* Writing functions without relying on examples
+* `async` / `await`
+* TypeScript
+* Writing JavaScript without examples
+* More complex automation-style problems
 
 ### Biggest improvement
 
@@ -705,18 +957,8 @@ I am starting to understand the logic behind JavaScript instead of only trying t
 
 ---
 
-# 📈 Progress
+## 🏁 Day 2 Complete
 
-**Day 2 / 180 — In Progress**
+**Day 2 / 180 — Completed**
 
-🟢 Functions
-🟢 Parameters & arguments
-🟢 Return values
-🟢 Objects
-🟢 Arrays of objects
-🟢 `filter()`
-🟢 `map()`
-🟢 Functions receiving objects
-🟡 Promises
-🟡 `async` / `await`
-🟡 Scope
+Next: **Day 3 — TypeScript fundamentals + stronger JavaScript practice**
